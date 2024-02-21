@@ -1,5 +1,14 @@
+"""
+Flask Documentation:     https://flask.palletsprojects.com/
+Jinja2 Documentation:    https://jinja.palletsprojects.com/
+Werkzeug Documentation:  https://werkzeug.palletsprojects.com/
+This file creates your application.
+"""
+
+
 from app import app
 from flask import render_template, request, redirect, url_for, flash
+import datetime
 
 
 ###
@@ -15,7 +24,12 @@ def home():
 @app.route('/about/')
 def about():
     """Render the website's about page."""
-    return render_template('about.html', name="Mary Jane")
+    return render_template('about.html', name="Reynaldo Kelly")
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html', datestring=format_date_joined(datetime.datetime.now()))
+
 
 
 ###
@@ -40,8 +54,16 @@ def add_header(response):
     response.headers['Cache-Control'] = 'public, max-age=0'
     return response
 
+def format_date_joined(date):
+    return "Joined " + date.strftime("%B, %Y")
+
+
+
 
 @app.errorhandler(404)
 def page_not_found(error):
     """Custom 404 page."""
     return render_template('404.html'), 404
+
+if __name__ == '__main__':
+    app.run(debug=True, host="0.0.0.0", port="8080")
